@@ -18,7 +18,7 @@ size_t count_words(const char *input, size_t string_length){
 }
 
 int main(){
- const char *input = "function: addi x1, x0, 100";
+ const char *input = "addi x1, x0, 100\n";
  size_t word_count = 0;
  size_t string_length = strlen(input);
  
@@ -55,5 +55,35 @@ int main(){
    }
   }
  }
- printf("Function Count: %li\n", function_count);
+ 
+ size_t function_index[function_count]; // This tells us which index of either word_start or word_end the functions declaration are at
+ index = 0;
+ for(size_t i = 0; i < word_count; i++){ /* Code for getting the index of words that are function declarations the array of words */
+  if(word_end[i] != string_length){
+   if(input[word_end[i]] == ':'){
+    function_index[index] = i;
+    index++;
+   }
+  }
+ }
+ 
+ size_t line_count = 1;
+ for(size_t i = 0; i < string_length; i++){
+  if(input[i] == '\n'){
+   line_count++;
+  }
+ }
+ size_t line[line_count]; // Array telling us the index of the string in which the newlines lie
+ line[0] = 0; // Just saying that the first line starts at the first character
+ if(line_count > 1){
+ index = 1;
+ for(size_t i = 0; i < string_length; i++){
+  if(input[i] == '\n'){
+   line[index] = i;
+   index++;
+   }
+  }
+ }
+ 
+ printf("Line Count: %li\n", line_count); // Test
 }
