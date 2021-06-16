@@ -108,6 +108,7 @@ int main(){
  }
 
  size_t instruction[instructions_in_code];
+ size_t which_instruction[instructions_in_code];
  size_t index_of_instructions = 0;
  
  for(size_t i = 0; i < word_count; i++){ /* Code for getting where in the source code the instructions are located */
@@ -118,6 +119,7 @@ int main(){
     index = word_start[i];
     if(strncmp(input + index, instruction_string[j], word_length) == 0){
      instruction[index_of_instructions] = i;
+     which_instruction[index_of_instructions] = j; // Tells us which instruction it is
      index_of_instructions++;
      break;
     }
@@ -134,12 +136,12 @@ int main(){
  
  size_t number[number_count];
  index = 0;
- for(size_t i = 0; i < word_count; i++){ /* Code for getting position of numbers in source code */
+ for(size_t i = 0; i < word_count; i++){ /* Code for getting amount position of numbers in source code */
   if(input[word_end[i] - 1] >= '0' && input[word_end[i] - 1] <= '9'){
    number[index] = i;
    index++;
   }
  }
 
- printf("Amount of Numbers = %li\n", number_count); // Test
+ printf("First instruction is: %s\n", instruction_string[which_instruction[0]]); // Test
 }
