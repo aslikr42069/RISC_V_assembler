@@ -83,7 +83,7 @@ int main(){
  size_t word_end[word_count];
  
  printf("Word Count: %li\n", word_count); // Test
- printf("Comment Count: %li\n", comment_count);
+ printf("Comment Count: %li\n", comment_count); // Test
  //uint8_t not_comment = 1;
 
  for(size_t i = 0; i < string_length; i++){ /* Code for getting indexes of the start of words */
@@ -100,9 +100,6 @@ int main(){
     }
    }
   }
- }
- for(size_t i = 0; i < word_count; i++){
-  printf("Word Start %li: %li\n", i, word_start[i]);
  }
 
  index = 0;
