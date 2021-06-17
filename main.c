@@ -1,10 +1,11 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "instructions.h"
 
 
-size_t count_words(const char *input, size_t string_length, size_t *comment_start, size_t *comment_end, size_t comment_count){
+size_t count_words(char *input, size_t string_length, size_t *comment_start, size_t *comment_end, size_t comment_count){
  size_t word_count = 0;
  uint8_t not_comment = 1;
  for(size_t i = 0; i < string_length; i++){
@@ -26,10 +27,29 @@ size_t count_words(const char *input, size_t string_length, size_t *comment_star
  return word_count;
 }
 
-int main(){
- const char *input = "addi x1, x0, 100 # Comment begin \nxori x1, x2, 100 # Another one\n addi x1, x2, 100 # One alst for good measure";
+int main(int argc, char *argv[]){
+ if(argc != 3){
+  printf("Incorrect usage of program.\nCorrect usage is: %s [INPUT_FILE_NAME] [OUTPUT_FILE_NAME]\n", argv[0]);
+  return 0;
+ }
+ 
+ FILE *file = fopen(argv[1], "r");
+ if(file == NULL){
+  printf("Error, file %s could not be opened!\n", argv[1]);
+ }
+ fseek(file, 0, SEEK_END);
+ size_t string_length = (size_t) ftell(file);
+ rewind(file);
+ size_t bytes_read = 0;
+ char *input = (char *) malloc(sizeof(char) * string_length);
+ bytes_read = fread(input, 1, string_length, file);
+ if(bytes_read != string_length){
+  puts("Error reading file\n");
+  return 0;
+ }
+ fclose(file);
+ 
  size_t word_count = 0;
- size_t string_length = strlen(input);
  size_t index = 0;
 
  size_t comment_count = 0;
@@ -81,24 +101,30 @@ int main(){
  word_count = count_words(input, string_length, comment_start, comment_end, comment_count);
  size_t word_start[word_count];
  size_t word_end[word_count];
- 
- printf("Word Count: %li\n", word_count); // Test
- printf("Comment Count: %li\n", comment_count); // Test
- //uint8_t not_comment = 1;
 
  for(size_t i = 0; i < string_length; i++){ /* Code for getting indexes of the start of words */
-  for(size_t j = 0; j < comment_count; j++){
-   if((i >= comment_start[j]) && (i < comment_end[j])){
-    i++;
-   } else{
-    if((input[i] >= '0' && input[i] <= '9') || (input[i] >= 'A' && input[i] <= 'Z') || (input[i] >= 'a' && input[i] <= 'z')){ 
-     word_start[index] = i;
-     index++;
-     while(((input[i] >= '0' && input[i] <= '9') || (input[i] >= 'A' && input[i] <= 'Z') || (input[i] >= 'a' && input[i] <= 'z')) && i < string_length){
-      i++;
+  if(comment_count > 0){
+   for(size_t j = 0; j < comment_count; j++){
+    if((i >= comment_start[j]) && (i < comment_end[j])){
+     i++;
+    } else{
+     if((input[i] >= '0' && input[i] <= '9') || (input[i] >= 'A' && input[i] <= 'Z') || (input[i] >= 'a' && input[i] <= 'z')){ 
+      word_start[index] = i;
+      index++;
+      while(((input[i] >= '0' && input[i] <= '9') || (input[i] >= 'A' && input[i] <= 'Z') || (input[i] >= 'a' && input[i] <= 'z')) && i < string_length){
+       i++;
+      }
      }
     }
    }
+  } else{
+   if((input[i] >= '0' && input[i] <= '9') || (input[i] >= 'A' && input[i] <= 'Z') || (input[i] >= 'a' && input[i] <= 'z')){ 
+      word_start[index] = i;
+      index++;
+      while(((input[i] >= '0' && input[i] <= '9') || (input[i] >= 'A' && input[i] <= 'Z') || (input[i] >= 'a' && input[i] <= 'z')) && i < string_length){
+       i++;
+      }
+    }
   }
  }
 
