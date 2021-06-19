@@ -6,6 +6,8 @@
 #include "word_manipulation.h"
 
 
+enum word_type{INSTRUCTION, NUMBER, FUNCTION_DECLARATION, FUNCTION_CALL, OTHER};
+
 int main(int argc, char *argv[]){
  if(argc != 3){
   printf("Incorrect usage of program.\nCorrect usage is: %s [INPUT_FILE_NAME] [OUTPUT_FILE_NAME]\n", argv[0]);
@@ -214,6 +216,39 @@ int main(int argc, char *argv[]){
   unorganized[i].next = symbol_table[index].next;
   symbol_table[index] = unorganized[i];
  }
+ 
+ size_t words[word_count][3]; // word[0][0] = the position of the start of the first word
+                              // word[0][1] = the position of the end of the first word
+                              // word[0][2] = the type of word of the first word
 
+ for(size_t i = 0; i < word_count; i++){
+  words[i][0] = word_start[i];
+  words[i][1] = word_end[i];
+  words[i][2] = OTHER;
+ }
+ 
+ for(size_t i = 0; i < instructions_in_code; i++){
+  words[instruction[i]][2] = INSTRUCTION;
+ }
+ 
+ for(size_t i = 0; i < number_count; i++){
+  words[number[i]][2] = NUMBER;
+ }
+
+ for(size_t i = 0; i < function_count; i++){
+  words[function_index[i]][2] = FUNCTION_DECLARATION;
+ }
+ 
+ function *search;
+ for(size_t i = 0; i < word_count; i++){
+  if(words[i][2] == OTHER){
+   search = lookup_function(input, symbol_table, function_count, words[i][0], words[i][1]);
+   if(search != NULL){
+    words[i][2] = FUNCTION_CALL;
+   }
+  }
+ }
+ 
  printf("First instruction is: %s\n", instruction_string[which_instruction[0]]); // Test
 }
+
