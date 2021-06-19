@@ -196,26 +196,27 @@ int main(int argc, char *argv[]){
   }
  }
 
- function symbol_table[function_count];
-
+ function *symbol_table[function_count];
 
  for(size_t i = 0; i < function_count; i++){
-  symbol_table->next = NULL;
+  symbol_table[i] = NULL;
  }
 
  function unorganized[function_count];
+
  for(size_t i = 0; i < function_count; i++){
   unorganized[i].start = word_start[function_index[i]];
   unorganized[i].end = word_end[function_index[i]];
   unorganized[i].length = word_end[function_index[i]] - word_start[function_index[i]];
-  unorganized[i].word = function_index[i];
  }
 
+ 
  for(size_t i = 0; i < function_count; i++){
   index = hash(input, unorganized[i].start, unorganized[i].end) % function_count;
-  unorganized[i].next = symbol_table[index].next;
-  symbol_table[index] = unorganized[i];
+  unorganized[i].next = symbol_table[index];
+  symbol_table[index] = &unorganized[i];
  }
+
  
  size_t words[word_count][3]; // word[0][0] = the position of the start of the first word
                               // word[0][1] = the position of the end of the first word
@@ -251,4 +252,3 @@ int main(int argc, char *argv[]){
  
  printf("First instruction is: %s\n", instruction_string[which_instruction[0]]); // Test
 }
-
