@@ -140,46 +140,53 @@ int main(int argc, char *argv[]){
  
  
  size_t instruction_count = 0;
- size_t word_length = 0;
  size_t instruction_length = 0;
- instruction_count = sizeof(instruction_string) / sizeof(instruction_string[0]); 
+ instruction_count = sizeof(instruction_string) / sizeof(instruction_string[0]);
+ printf("instruction count:%li\n", instruction_count); 
  index = 0;
  size_t instructions_in_code = 0;
 
- for(size_t i = 0; i < word_count; i++){ /* Code for getting the amount of instructions in the source code */
-  word_length = word_end[i] - word_start[i];
-  for(size_t j = 0; j < instruction_count; j++){
-   instruction_length = strnlen(instruction_string[j], 6);
-   if(word_length == instruction_length){
-    index = word_start[i];
-    if(strncmp(input + index, instruction_string[j], word_length) == 0){
-     instructions_in_code++;
-     break;
-    }
-   }
+ riscv_instruction *instruction_table[instruction_count];
+ riscv_instruction unorganized_instructions[instruction_count];
+
+ for(size_t i = 0; i < instruction_count; i++){
+  instruction_table[i] = NULL;
+ }
+
+ for(size_t i = 0; i < instruction_count; i++){
+  unorganized_instructions[i].length = strlen(instruction_string[i]);
+  unorganized_instructions[i].index = i;
+ }
+
+ for(size_t i = 0; i < instruction_count; i++){
+  index = hash(instruction_string[i], 0, unorganized_instructions[i].length) % instruction_count;
+  unorganized_instructions[i].next = instruction_table[index];
+  instruction_table[index] = &unorganized_instructions[i];
+ }
+
+ riscv_instruction *instruction_search;
+
+ for(size_t i = 0; i < word_count; i++){
+  instruction_search = lookup_instruction(input, instruction_table, instruction_count, word_start[i], word_end[i]);
+  if(instruction_search != NULL){
+   instructions_in_code++;
   }
  }
 
  size_t instruction[instructions_in_code];
  size_t which_instruction[instructions_in_code];
- size_t index_of_instructions = 0;
- 
- for(size_t i = 0; i < word_count; i++){ /* Code for getting where in the source code the instructions are located */
-  word_length = word_end[i] - word_start[i];
-  for(size_t j = 0; j < instruction_count; j++){
-   instruction_length = strnlen(instruction_string[j], 6);
-   if(word_length == instruction_length){
-    index = word_start[i];
-    if(strncmp(input + index, instruction_string[j], word_length) == 0){
-     instruction[index_of_instructions] = i;
-     which_instruction[index_of_instructions] = j; // Tells us which instruction it is
-     index_of_instructions++;
-     break;
-    }
-   }
+ index = 0;
+
+ for(size_t i = 0; i < word_count; i++){
+  instruction_search = lookup_instruction(input, instruction_table, instruction_count, word_start[i], word_end[i]);
+  if(instruction_search != NULL){
+   instruction[index] = i;
+   which_instruction[index] = instruction_search->index;
+   index++;
   }
  }
- 
+
+
  size_t number_count = 0;
  for(size_t i = 0; i < word_count; i++){ /* Code for getting amount of numbers in source code */
   if(input[word_end[i] - 1] >= '0' && input[word_end[i] - 1] <= '9'){
@@ -195,6 +202,7 @@ int main(int argc, char *argv[]){
    index++;
   }
  }
+
 
  function *symbol_table[function_count];
 
