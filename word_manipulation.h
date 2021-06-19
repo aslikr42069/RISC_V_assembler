@@ -37,12 +37,28 @@ typedef struct function{
 
 }function;
 
+typedef struct riscv_instruction{
+ size_t length;
+ size_t index;
+ struct riscv_instruction *next;
+}riscv_instruction;
+
 function *lookup_function(char *input, function *function_table[], size_t function_count, size_t fn2_start, size_t fn2_end){
  size_t index = hash(input, fn2_start, fn2_end) % function_count;
  function *tmp = function_table[index];
  while((tmp != NULL) && (strncmp(input + tmp->start, input + fn2_start, tmp->length) != 0)){
+  //printf("tmp =");
   tmp = tmp->next;
  }
  return tmp;
 } 
+
+riscv_instruction *lookup_instruction(char *input, riscv_instruction *instruction_table[], size_t instruction_count, size_t start, size_t end){
+ size_t index = hash(input, start, end) % instruction_count;
+ riscv_instruction *tmp = instruction_table[index];
+ while((tmp != NULL) && (strncmp(instruction_string[tmp->index], input + start, tmp->length) != 0)){
+  tmp = tmp->next;
+ }
+ return tmp;
+}
 
