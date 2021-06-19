@@ -142,7 +142,6 @@ int main(int argc, char *argv[]){
  size_t instruction_count = 0;
  size_t instruction_length = 0;
  instruction_count = sizeof(instruction_string) / sizeof(instruction_string[0]);
- printf("instruction count:%li\n", instruction_count); 
  index = 0;
  size_t instructions_in_code = 0;
 
