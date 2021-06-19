@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "instructions.h"
 #include "word_manipulation.h"
 
 
