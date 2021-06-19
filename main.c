@@ -3,29 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "instructions.h"
+#include "word_manipulation.h"
 
-
-size_t count_words(char *input, size_t string_length, size_t *comment_start, size_t *comment_end, size_t comment_count){
- size_t word_count = 0;
- uint8_t not_comment = 1;
- for(size_t i = 0; i < string_length; i++){
-  not_comment = 1;
-  if((input[i] >= '0' && input[i] <= '9') || (input[i] >= 'A' && input[i] <= 'Z') || (input[i] >= 'a' && input[i] <= 'z')){
-   for(size_t j = 0; j < comment_count; j++){
-    if((i >= comment_start[j]) && (i < comment_end[j])){
-     not_comment = 0;
-    }
-   }
-   if(not_comment == 1){
-    word_count++;
-   }
-   while(((input[i] >= '0' && input[i] <= '9') || (input[i] >= 'A' && input[i] <= 'Z') || (input[i] >= 'a' && input[i] <= 'z')) && i < string_length){
-    i++;
-   }
-  }
- }
- return word_count;
-}
 
 int main(int argc, char *argv[]){
  if(argc != 3){
@@ -213,6 +192,27 @@ int main(int argc, char *argv[]){
    number[index] = i;
    index++;
   }
+ }
+
+ function symbol_table[function_count];
+
+
+ for(size_t i = 0; i < function_count; i++){
+  symbol_table->next = NULL;
+ }
+
+ function unorganized[function_count];
+ for(size_t i = 0; i < function_count; i++){
+  unorganized[i].start = word_start[function_index[i]];
+  unorganized[i].end = word_end[function_index[i]];
+  unorganized[i].length = word_end[function_index[i]] - word_start[function_index[i]];
+  unorganized[i].word = function_index[i];
+ }
+
+ for(size_t i = 0; i < function_count; i++){
+  index = hash(input, unorganized[i].start, unorganized[i].end) % function_count;
+  unorganized[i].next = symbol_table[index].next;
+  symbol_table[index] = unorganized[i];
  }
 
  printf("First instruction is: %s\n", instruction_string[which_instruction[0]]); // Test
