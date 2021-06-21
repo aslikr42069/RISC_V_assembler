@@ -289,6 +289,7 @@ int main(int argc, char *argv[]){
    case FUNCTION_CALL:
     break;
    case OTHER:
+    printf("Error: Unrecognized symbol at line %li\n", current_line);
     break;
   } 
  }  
