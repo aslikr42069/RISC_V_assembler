@@ -6,7 +6,6 @@
 #include "word_manipulation.h"
 
 
-enum word_type{INSTRUCTION, NUMBER, FUNCTION_DECLARATION, FUNCTION_CALL, OTHER};
 
 int main(int argc, char *argv[]){
  if(argc != 3){
@@ -143,10 +142,10 @@ int main(int argc, char *argv[]){
  size_t instruction_length = 0;
  instruction_count = sizeof(instruction_string) / sizeof(instruction_string[0]);
  index = 0;
- size_t instructions_in_code = 0;
+ size_t instructions_in_code = 0; 
 
  riscv_instruction *instruction_table[instruction_count];
- riscv_instruction unorganized_instructions[instruction_count];
+ riscv_instruction unorganized_instructions[instruction_count]; // Start of code for making hash table of instructions
 
  for(size_t i = 0; i < instruction_count; i++){
   instruction_table[i] = NULL;
@@ -165,7 +164,7 @@ int main(int argc, char *argv[]){
 
  riscv_instruction *instruction_search;
 
- for(size_t i = 0; i < word_count; i++){
+ for(size_t i = 0; i < word_count; i++){ // Code for counting number of instructions in code
   instruction_search = lookup_instruction(input, instruction_table, instruction_count, word_start[i], word_end[i]);
   if(instruction_search != NULL){
    instructions_in_code++;
@@ -176,7 +175,7 @@ int main(int argc, char *argv[]){
  size_t which_instruction[instructions_in_code];
  index = 0;
 
- for(size_t i = 0; i < word_count; i++){
+ for(size_t i = 0; i < word_count; i++){ // Code for identfying position and identity of instructions in code
   instruction_search = lookup_instruction(input, instruction_table, instruction_count, word_start[i], word_end[i]);
   if(instruction_search != NULL){
    instruction[index] = i;
@@ -203,7 +202,8 @@ int main(int argc, char *argv[]){
  }
 
 
- function *symbol_table[function_count];
+ function *symbol_table[function_count]; // Start of code for making the symbol table,
+                                         // which contains the function names
 
  for(size_t i = 0; i < function_count; i++){
   symbol_table[i] = NULL;
@@ -212,6 +212,7 @@ int main(int argc, char *argv[]){
  function unorganized[function_count];
 
  for(size_t i = 0; i < function_count; i++){
+  unorganized[i].index = function_index[i];
   unorganized[i].start = word_start[function_index[i]];
   unorganized[i].end = word_end[function_index[i]];
   unorganized[i].length = word_end[function_index[i]] - word_start[function_index[i]];
@@ -256,6 +257,42 @@ int main(int argc, char *argv[]){
    }
   }
  }
+
+ index = 0;
+ size_t current_line = 1;
+ size_t argument_count = 0;
+ for(size_t i = 0; i < word_count; i++){ /* Code for checking code correctness */
+  if(current_line < line_count && word_start[i] >= line[current_line] /* Code for getting current line */ ){
+   current_line++;
+  }
+  switch(words[i][2]){
+   case INSTRUCTION:
+    argument_count = 0;
+    while((i + argument_count + 1 < word_count) && words[i + argument_count + 1][2] == instruction_arg_type[which_instruction[index]]){
+     argument_count++;
+    }
+    if(argument_count != instruction_argument_count[which_instruction[index]]){
+     printf("Error: Line %li. Wrong amount of arguments supplied. Expected %i, recieved %li\n", current_line, instruction_argument_count[which_instruction[index]], argument_count);
+     exit(1);
+    }
+    if(words[i + argument_count][2] != instruction_arg_type[which_instruction[index]] && instruction_argument_count[which_instruction[index]] > 0){
+     printf("Error: Line %li. Wrong type of argument supplied to instruction\n", current_line);
+     printf("Argument Type 1 %li, 2: %li\n", words[i + 1 + argument_count][2], instruction_arg_type[which_instruction[index]]);
+     exit(1);
+    }
+    index++;
+    break;
+   case NUMBER:
+    break;
+   case FUNCTION_DECLARATION:
+    break;
+   case FUNCTION_CALL:
+    break;
+   case OTHER:
+    break;
+  } 
+ }  
  
  printf("First instruction is: %s\n", instruction_string[which_instruction[0]]); // Test
 }
+

@@ -30,6 +30,7 @@ size_t hash(char *input, size_t start, size_t end){
 }
 
 typedef struct function{
+ size_t index;
  size_t start;
  size_t end;
  size_t length;
