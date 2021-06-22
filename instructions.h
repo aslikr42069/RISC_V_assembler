@@ -67,7 +67,10 @@ const char * instruction_string[] = {
 "divuw",
 "remw",
 "remuw",
-"call"
+"call",
+"nop",
+"not",
+"mv"
 };
 
 
@@ -141,7 +144,10 @@ const uint8_t instruction_argument_count[] = {
 3,
 3,
 3,
-1
+1,
+0,
+2,
+2
 };
 
 enum word_type{INSTRUCTION, NUMBER, FUNCTION_DECLARATION, FUNCTION_CALL, OTHER};
@@ -215,6 +221,9 @@ NUMBER,
 NUMBER,
 NUMBER,
 NUMBER,
-FUNCTION_CALL
+FUNCTION_CALL,
+NUMBER,
+NUMBER,
+NUMBER
 };
 
