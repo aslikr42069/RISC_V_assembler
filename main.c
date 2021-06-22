@@ -139,7 +139,6 @@ int main(int argc, char *argv[]){
  
  
  size_t instruction_count = 0;
- size_t instruction_length = 0;
  instruction_count = sizeof(instruction_string) / sizeof(instruction_string[0]);
  index = 0;
  size_t instructions_in_code = 0; 
@@ -290,6 +289,7 @@ int main(int argc, char *argv[]){
     break;
    case OTHER:
     printf("Error: Unrecognized symbol at line %li\n", current_line);
+    exit(1);
     break;
   } 
  }  
