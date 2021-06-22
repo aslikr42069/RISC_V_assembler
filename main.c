@@ -7,6 +7,7 @@
 
 
 
+
 int main(int argc, char *argv[]){
  if(argc != 3){
   printf("Incorrect usage of program.\nCorrect usage is: %s [INPUT_FILE_NAME] [OUTPUT_FILE_NAME]\n", argv[0]);
@@ -260,6 +261,9 @@ int main(int argc, char *argv[]){
  index = 0;
  size_t current_line = 1;
  size_t argument_count = 0;
+ size_t num_index = 0;
+
+
  for(size_t i = 0; i < word_count; i++){ /* Code for checking code correctness */
   if(current_line < line_count && word_start[i] >= line[current_line] /* Code for getting current line */ ){
    current_line++;
@@ -282,6 +286,12 @@ int main(int argc, char *argv[]){
     index++;
     break;
    case NUMBER:
+    if(input[word_start[number[num_index]]] == 'x'){
+     number[num_index] = number_return(input, word_start[number[num_index]] + 1, word_end[number[num_index]], current_line);
+    }else{
+     number[num_index] = number_return(input, word_start[number[num_index]], word_end[number[num_index]], current_line);
+    }
+    num_index++;
     break;
    case FUNCTION_DECLARATION:
     break;
@@ -292,7 +302,8 @@ int main(int argc, char *argv[]){
     exit(1);
     break;
   } 
- }  
+ } 
+ 
  
  printf("First instruction is: %s\n", instruction_string[which_instruction[0]]); // Test
 }

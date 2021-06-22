@@ -63,3 +63,25 @@ riscv_instruction *lookup_instruction(char *input, riscv_instruction *instructio
  return tmp;
 }
 
+size_t number_return(char *input, size_t start, size_t end, size_t current_line){
+ size_t current_digit = 1;
+ size_t number = 0;
+ for(size_t i = start; i < end; i++){
+  if((input[i] < '0') || (input[i] > '9')){
+   printf("Error: Line %li, non-number in token that was interpreted as number\n", current_line);
+   exit(1);
+  }
+ }
+
+ for(size_t i = start; i < end - 1; i++){
+  current_digit = current_digit * 10;
+ }
+
+
+ for(size_t i = start; i < end; i++){
+  number += (input[i] - '0') * current_digit;
+  current_digit = current_digit / 10;
+ }
+ return number;
+}
+
