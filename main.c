@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "instructions.h"
 #include "word_manipulation.h"
-
+#include "generate_machine_code.h"
 
 
 
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]){
  }
  printf("Number Count: %li\n", number_count);
  
- size_t number[number_count];
+ ssize_t number[number_count];
  index = 0;
  for(size_t i = 0; i < word_count; i++){ /* Code for getting amount position of numbers in source code */
   if(input[word_start[i]] >= '0' && input[word_start[i]] <= '9'){
