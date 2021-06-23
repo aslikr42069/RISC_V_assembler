@@ -187,17 +187,33 @@ int main(int argc, char *argv[]){
 
  size_t number_count = 0;
  for(size_t i = 0; i < word_count; i++){ /* Code for getting amount of numbers in source code */
-  if(input[word_end[i] - 1] >= '0' && input[word_end[i] - 1] <= '9'){
+  if(input[word_start[i]] >= '0' && input[word_start[i]] <= '9'){
    number_count++;
   }
+  if(input[word_start[i]] == 'x'){
+   if((word_end[i] - word_start[i]) > 1){
+    if(input[word_start[i] + 1] >= '0' && input[word_start[i] + 1] <= '9'){
+     number_count++;
+    }
+   }
+  }
  }
+ printf("Number Count: %li\n", number_count);
  
  size_t number[number_count];
  index = 0;
  for(size_t i = 0; i < word_count; i++){ /* Code for getting amount position of numbers in source code */
-  if(input[word_end[i] - 1] >= '0' && input[word_end[i] - 1] <= '9'){
+  if(input[word_start[i]] >= '0' && input[word_start[i]] <= '9'){
    number[index] = i;
    index++;
+  }
+  if(input[word_start[i]] == 'x'){
+   if((word_end[i] - word_start[i]) > 1){
+    if(input[word_start[i] + 1] >= '0' && input[word_start[i] + 1] <= '9'){
+     number[index] = i;
+     index++;
+    }
+   }
   }
  }
 
