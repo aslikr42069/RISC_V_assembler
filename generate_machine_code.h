@@ -1,14 +1,6 @@
 
-uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[], size_t number_count, ssize_t *number, size_t instructions_in_code, size_t *instruction, size_t *which_instruction, size_t function_count, function *symbol_table[], size_t line_count, size_t *line){
+uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[], size_t number_count, ssize_t *number, size_t instructions_in_code, size_t *instruction, size_t *which_instruction, size_t function_count, function *symbol_table[], size_t line_count, size_t *line, size_t actual_instruction_count){
  
- size_t actual_instruction_count = instructions_in_code;
- 
- for(size_t i = 0; i < instructions_in_code; i++){
-  if(which_instruction[i] == 68){
-   // If the instruction is call, then run this code
-   actual_instruction_count++;
-  }
- }
 
  uint32_t machine_code[actual_instruction_count];
  size_t current_number = 0;

@@ -319,7 +319,14 @@ int main(int argc, char *argv[]){
     break;
   } 
  } 
+ size_t actual_instruction_count = instructions_in_code;
  
+ for(size_t i = 0; i < instructions_in_code; i++){
+  if(which_instruction[i] == 68){
+   // If the instruction is call, then run this code
+   actual_instruction_count++;
+  }
+ }
  
  printf("First instruction is: %s\n", instruction_string[which_instruction[0]]); // Test
 }
