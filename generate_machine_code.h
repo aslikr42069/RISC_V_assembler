@@ -18,7 +18,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
   if(current_line < line_count && words[instruction[current_instruction]][0] >= line[current_line]){
    current_line++;
   }
-  switch(which_instruction[i]){
+  switch(which_instruction[current_instruction]){
    case 0:/* lui */
     if(number[current_number] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
@@ -182,7 +182,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++; 
     break;
    case 18:/* addi */
-    if(number[current_number + 1] > 31 || number[current_number + 2] > 31){
+    if(number[current_number] > 31 || number[current_number + 1] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
@@ -191,7 +191,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++; 
     break;
    case 19:/* slti */
-    if(number[current_number + 1] > 31 || number[current_number + 2] > 31){
+    if(number[current_number] > 31 || number[current_number + 1] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
@@ -200,7 +200,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++;
     break;
    case 20:/* sltiu */
-    if(number[current_number + 1] > 31 || number[current_number + 2] > 31){
+    if(number[current_number] > 31 || number[current_number + 1] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
@@ -209,7 +209,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++;
     break;
    case 21:/* xori */
-    if(number[current_number + 1] > 31 || number[current_number + 2] > 31){
+    if(number[current_number] > 31 || number[current_number + 1] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
@@ -218,7 +218,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++;
     break;
    case 22:/* ori */
-    if(number[current_number + 1] > 31 || number[current_number + 2] > 31){
+    if(number[current_number] > 31 || number[current_number + 1] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
@@ -227,7 +227,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++;
     break;
    case 23:/* andi */
-    if(number[current_number + 1] > 31 || number[current_number + 2] > 31){
+    if(number[current_number] > 31 || number[current_number + 1] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
@@ -236,7 +236,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++;
     break;
    case 24:/* slli */
-    if(number[current_number + 1] > 31 || number[current_number + 2] > 31){
+    if(number[current_number] > 31 || number[current_number + 1] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
@@ -245,7 +245,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++;
     break;
    case 25:/* srli */
-    if(number[current_number + 1] > 31 || number[current_number + 2] > 31){
+    if(number[current_number] > 31 || number[current_number + 1] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
@@ -254,7 +254,7 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++;
     break;
    case 26:/* srai */
-    if(number[current_number + 1] > 31 || number[current_number + 2] > 31){
+    if(number[current_number] > 31 || number[current_number + 1] > 31){
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
@@ -263,30 +263,104 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
     current_instruction++;
     break;
    case 27:/* add */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
    case 28:/* sub */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x20 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
    case 29:/* sll */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
    case 30:/* slt */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x2 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
    case 31:/* sltu */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x3 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
    case 32:/* xor */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x4 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
    case 33:/* srl */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
    case 34:/* sra */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x20 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
    case 35:/* or */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x6 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
    case 36:/* and */
+    if(number[current_number] > 31 || number[current_number + 1] > 31 || number[current_number + 2] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 51 | ((number[current_number] & 0x1F) << 6) | (0x7 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    current_number += 3;
+    current_instruction++;
     break;
-   case 37:/* fence */
+   case 37:/* fence */ 
+    machine_code[i] = 0xF | (0 << 6) | (0xFF << 19) | (0 << 27);
+    current_instruction++;
     break;
    case 38:/* ecall */
+    machine_code[i] = 115;
     break;
    case 39:/* ebreak */
+    machine_code[i] = 1048691;
     break;
    case 40:/* lwu */
     break;
