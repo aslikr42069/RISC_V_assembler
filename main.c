@@ -198,7 +198,6 @@ int main(int argc, char *argv[]){
    }
   }
  }
- printf("Number Count: %li\n", number_count);
  
  intmax_t number[number_count];
  index = 0;
@@ -327,7 +326,12 @@ int main(int argc, char *argv[]){
    actual_instruction_count++;
   }
  }
+
+ uint32_t machine_code[actual_instruction_count];
+ generate_machine_code(input, word_count, word_start, word_end, number, instructions_in_code, instruction, which_instruction, function_count, symbol_table, line_count, line, actual_instruction_count, machine_code);
+
+ FILE *output = fopen(argv[2], "wb");
+ fwrite(machine_code, sizeof(uint32_t) * (actual_instruction_count - 1), actual_instruction_count, output);
  
- printf("First instruction is: %s\n", instruction_string[which_instruction[0]]); // Test
 }
 
