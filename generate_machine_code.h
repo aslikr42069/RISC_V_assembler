@@ -609,10 +609,26 @@ uint32_t *generate_machine_code(char *input, size_t word_count, size_t *words[],
    case 68:/* call */
     break;
    case 69:/* nop */
+    machine_code[i] = 19;
+    current_instruction++;
     break;
    case 70:/* not */
+    if(number[current_number] > 31|| number[current_number + 1] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+    }
+    machine_code[i] = 35 | ((number[current_number] & 0x1F) << 6) | (0x4 << 11) | ((number[current_number + 1] & 0x1F) << 14) | (0xFFE << 19);
+    current_instruction++;
+    current_number += 2;
     break;
    case 71:/* mv */
+    if(number[current_number] > 31|| number[current_number + 1] > 31){
+     printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
+     exit(1);
+     }
+    machine_code[i] = 35 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | (0x0 << 19);
+    current_number += 2;
+    current_instruction++; 
     break;
   }
  }
