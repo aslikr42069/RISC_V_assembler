@@ -589,7 +589,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
      }
-    machine_code[i + instruction_offset] = 20 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | (0x0 << 20);
+     machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((0  & 0xFFF) << 20);
     current_number += 2;
     break;
   }
