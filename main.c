@@ -332,6 +332,6 @@ int main(int argc, char *argv[]){
  
  FILE *output = fopen(argv[2], "wb");
  fwrite(machine_code, sizeof(uint32_t), actual_instruction_count, output);
- 
+ fclose(output);
 }
 
