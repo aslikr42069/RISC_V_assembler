@@ -17,7 +17,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 55 | ((number[current_number] & 0x1F) << 6) | (number[current_number + 1] & 0xFFFFF000);
+    machine_code[i + instruction_offset] = 55 | ((number[current_number] & 0x1F) << 7) | (number[current_number + 1] & 0xFFFFF000);
     current_number += 2;
     break;
    case 1:/* auipc */
@@ -25,7 +25,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 23 | ((number[current_number] & 0x1F) << 6) | (number[current_number + 1] & 0xFFFFF000);
+    machine_code[i + instruction_offset] = 23 | ((number[current_number] & 0x1F) << 7) | (number[current_number + 1] & 0xFFFFF000);
     current_number += 2;
     break;
    case 2:/* jal */
@@ -33,7 +33,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 111 | ((number[current_number] & 0x1F) << 6) | (number[current_number + 1] & 0xFF000) | ((number[current_number + 1] & 2048) << 9) | ((number[current_number + 1] & 0x7FE) << 11) | ((number[current_number + 1] & 0x100000) << 11);
+    machine_code[i + instruction_offset] = 111 | ((number[current_number] & 0x1F) << 7) | (number[current_number + 1] & 0xFF000) | ((number[current_number + 1] & 2048) << 9) | ((number[current_number + 1] & 0x7FE) << 12) | ((number[current_number + 1] & 0x100000) << 11);
     current_number += 2;
     break;
    case 3:/* jalr */
@@ -41,7 +41,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 23 | ((number[current_number] & 0x1F) << 6) | (0 << 11) | ((number[current_number + 1] & 0x1F) << 14)| ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 103 | ((number[current_number] & 0x1F) << 7) | (0 << 12) | ((number[current_number + 1] & 0x1F) << 15)| ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 4:/* beq */
@@ -49,7 +49,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0x7E0) << 19) | ((number[current_number] & 4096) << 19);
+    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0x7E0) << 20) | ((number[current_number] & 4096) << 19);
     current_number += 3;
     break;
    case 5:/* bne */
@@ -57,7 +57,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0x7E0) << 19) | ((number[current_number] & 4096) << 19);
+    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x1 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0x7E0) << 20) | ((number[current_number] & 4096) << 19);
     current_number += 3;
     break;
    case 6:/* blt */
@@ -65,7 +65,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x4 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0x7E0) << 19) | ((number[current_number] & 4096) << 19);
+    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x4 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0x7E0) << 20) | ((number[current_number] & 4096) << 19);
     current_number += 3;
     break;
    case 7:/* bge */
@@ -73,7 +73,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0x7E0) << 19) | ((number[current_number] & 4096) << 19);
+    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0x7E0) << 20) | ((number[current_number] & 4096) << 19);
     current_number += 3;
     break;
    case 8:/* bltu */
@@ -81,7 +81,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x6 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0x7E0) << 19) | ((number[current_number] & 4096) << 19);
+    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x6 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0x7E0) << 20) | ((number[current_number] & 4096) << 19);
     current_number += 3;
     break;
    case 9:/* bgeu */
@@ -89,7 +89,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x7 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0x7E0) << 19) | ((number[current_number] & 4096) << 19);
+    machine_code[i + instruction_offset] = 99 | ((number[current_number] & 2048) >> 5) | ((number[current_number] & 0x1E) << 5) | (0x7 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0x7E0) << 20) | ((number[current_number] & 4096) << 19);
     current_number += 3;
     break;
    case 10:/* lb */
@@ -97,7 +97,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 6) | (0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 7) | (0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 11:/* lh */
@@ -105,7 +105,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 6) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 7) | (0x1 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 12:/* lw */
@@ -113,7 +113,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 6) | (0x2 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 7) | (0x2 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 13:/* lbu */
@@ -121,7 +121,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 6) | (0x4 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 7) | (0x4 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 14:/* lhu */
@@ -129,7 +129,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 15:/* sb */
@@ -137,7 +137,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0xFE0) << 19);
+    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0xFE0) << 20);
     current_number += 3;
     break;
    case 16:/* sh */
@@ -145,7 +145,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0xFE0) << 19);
+    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 7) | (0x1 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0xFE0) << 20);
     current_number += 3;
     break;
    case 17:/* sw */
@@ -153,7 +153,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x2 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0xFE0) << 19);
+    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 7) | (0x2 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0xFE0) << 20);
     current_number += 3;
     break;
    case 18:/* addi */
@@ -161,7 +161,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 19:/* slti */
@@ -169,7 +169,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x2 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x2 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 20:/* sltiu */
@@ -177,7 +177,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x3 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x3 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 21:/* xori */
@@ -185,7 +185,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x4 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x4 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 22:/* ori */
@@ -193,7 +193,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x6 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x6 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 23:/* andi */
@@ -201,7 +201,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x7 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x7 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 24:/* slli */
@@ -209,7 +209,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x1 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 25:/* srli */
@@ -217,7 +217,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 26:/* srai */
@@ -225,7 +225,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x20 << 24);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x20 << 25);
     current_number += 3;
     break;
    case 27:/* add */
@@ -233,7 +233,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 28:/* sub */
@@ -241,7 +241,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x20 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x20 << 25);
     current_number += 3;
     break;
    case 29:/* sll */
@@ -249,7 +249,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x1 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 30:/* slt */
@@ -257,7 +257,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x2 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x2 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 31:/* sltu */
@@ -265,7 +265,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x3 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x3 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 32:/* xor */
@@ -273,7 +273,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x4 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x4 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 33:/* srl */
@@ -281,7 +281,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 34:/* sra */
@@ -289,7 +289,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x20 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x20 << 25);
     current_number += 3;
     break;
    case 35:/* or */
@@ -297,7 +297,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x6 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x6 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 36:/* and */
@@ -305,11 +305,11 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x7 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x7 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 37:/* fence */ 
-    machine_code[i + instruction_offset] = 0xF | (0 << 6) | (0xFF << 19) | (0 << 27);
+    machine_code[i + instruction_offset] = 0xF | (0 << 7) | (0xFF << 20) | (0 << 27);
     break;
    case 38:/* ecall */
     machine_code[i + instruction_offset] = 115;
@@ -322,7 +322,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 6) | (0x6 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 7) | (0x6 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 41:/* ld */
@@ -330,7 +330,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 6) | (0x3 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 3 | ((number[current_number] & 0x1F) << 7) | (0x3 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 42:/* sd */
@@ -338,7 +338,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x3 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | ((number[current_number] & 0xFE0) << 19);
+    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 7) | (0x3 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | ((number[current_number] & 0xFE0) << 20);
     current_number += 3;
     break;
    case 43:/* slli */
@@ -346,7 +346,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 6) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x3F) << 19) | (0x0 << 25);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x1 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x3F) << 20) | (0x0 << 26);
     current_number += 3;
     break;
    case 44:/* srli */
@@ -354,7 +354,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x3F) << 19) | (0x0 << 25);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x3F) << 20) | (0x0 << 26);
     current_number += 3;
     break;
    case 45:/* srai */
@@ -362,7 +362,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x3F) << 19) | (0x10 << 25);
+    machine_code[i + instruction_offset] = 19 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x3F) << 20) | (0x10 << 26);
     current_number += 3;
     break;
    case 46:/* addiw */
@@ -370,7 +370,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 27 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0xFFF) << 19);
+    machine_code[i + instruction_offset] = 27 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0xFFF) << 20);
     current_number += 3;
     break;
    case 47:/* slliw */
@@ -378,7 +378,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 27 | ((number[current_number] & 0x1F) << 6) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 27 | ((number[current_number] & 0x1F) << 7) | (0x1 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 48:/* srliw */
@@ -386,7 +386,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 27 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 27 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 49:/* sraiw */
@@ -394,7 +394,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 27 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x20 << 24);
+    machine_code[i + instruction_offset] = 27 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x20 << 25);
     current_number += 3;
     break;
    case 50:/* addw */
@@ -402,7 +402,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 51:/* subw */
@@ -410,7 +410,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x20 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x20 << 25);
     current_number += 3;
     break;
    case 52:/* sllw */
@@ -418,7 +418,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x1 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 53:/* srlw */
@@ -426,7 +426,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x0 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x0 << 25);
     current_number += 3;
     break;
    case 54:/* sraw */
@@ -434,7 +434,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x20 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x20 << 25);
     current_number += 3;
     break;
    case 55:/* mul */
@@ -442,7 +442,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 56:/* mulh */
@@ -450,7 +450,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x1 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x1 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 57:/* mulhsu */
@@ -458,7 +458,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x2 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x2 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 58:/* mulhu */
@@ -466,7 +466,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x3 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x3 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 59:/* div */
@@ -474,7 +474,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x4 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x4 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 60:/* divu */
@@ -482,7 +482,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 61:/* rem */
@@ -490,7 +490,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x6 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x6 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 62:/* remu */
@@ -498,7 +498,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 6) | (0x7 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 51 | ((number[current_number] & 0x1F) << 7) | (0x7 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 63:/* mulw */
@@ -506,7 +506,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 64:/* divw */
@@ -514,7 +514,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x4 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x4 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 65:/* divuw */
@@ -522,7 +522,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x5 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x5 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 66:/* remw */
@@ -530,7 +530,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x6 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x6 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 67:/* remuw */
@@ -538,7 +538,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 6) | (0x7 << 11) | ((number[current_number + 1] & 0x1F) << 14) | ((number[current_number + 2] & 0x1F) << 19) | (0x1 << 24);
+    machine_code[i + instruction_offset] = 59 | ((number[current_number] & 0x1F) << 7) | (0x7 << 12) | ((number[current_number + 1] & 0x1F) << 15) | ((number[current_number + 2] & 0x1F) << 20) | (0x1 << 25);
     current_number += 3;
     break;
    case 68:/* call */
@@ -546,12 +546,12 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
     if(which_function->index > instruction[i]){
      if(which_function->index == (word_count - 1)){
       if(i == (instructions_in_code - 1)){
-       machine_code[i + instruction_offset] = 23 | (0x1 << 6) | (0 & 0xFFFFF000);
-       machine_code[i + instruction_offset + 1] = 23 | (0x1 << 6) | (0 << 11) | (0x1 << 14) | ((0 & 0xFFF) << 19);
+       machine_code[i + instruction_offset] = 23 | (0x1 << 7) | (0 & 0xFFFFF000);
+       machine_code[i + instruction_offset + 1] = 23 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((0 & 0xFFF) << 20);
       }else{
        for(size_t j = i; j < instructions_in_code; j++){
-        machine_code[i + instruction_offset] = 23 | (0x1 << 6) | (((j - i) * 4) & 0xFFFFF000);
-        machine_code[i + instruction_offset + 1] = 23 | (0x1 << 6) | (0 << 11) | (0x1 << 14) | ((((j - i) * 4) & 0xFFF) << 19);
+        machine_code[i + instruction_offset] = 23 | (0x1 << 7) | (((j - i) * 4) & 0xFFFFF000);
+        machine_code[i + instruction_offset + 1] = 23 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((((j - i) * 4) & 0xFFF) << 20);
        }
       }
      } else{
@@ -559,16 +559,16 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
        while(instruction[next_instruction_position] < which_function->index){
         next_instruction_position++;
        }
-       machine_code[i + instruction_offset] = 23 | (0x1 << 6) | (((next_instruction_position - i) * 4) & 0xFFFFF000);
-       machine_code[i + instruction_offset + 1] = 23 | (0x1 << 6) | (0 << 11) | (0x1 << 14) | ((((next_instruction_position - i) * 4) & 0xFFF) << 19);
+       machine_code[i + instruction_offset] = 23 | (0x1 << 7) | (((next_instruction_position - i) * 4) & 0xFFFFF000);
+       machine_code[i + instruction_offset + 1] = 23 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((((next_instruction_position - i) * 4) & 0xFFF) << 20);
      }
     } else {
      size_t next_instruction_position = 0;
      while(instruction[next_instruction_position] < which_function->index){
       next_instruction_position++;
      }
-     machine_code[i + instruction_offset] = 23 | (0x1 << 6) | (((i - next_instruction_position) * -4) & 0xFFFFF000);
-     machine_code[i + instruction_offset + 1] = 23 | (0x1 << 6) | (0 << 11) | (0x1 << 14) | ((((i - next_instruction_position) * -4) & 0xFFF) << 19);
+     machine_code[i + instruction_offset] = 23 | (0x1 << 7) | (((i - next_instruction_position) * -4) & 0xFFFFF000);
+     machine_code[i + instruction_offset + 1] = 23 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((((i - next_instruction_position) * -4) & 0xFFF) << 20);
     }
     actual_instruction_count++;
     instruction_offset++;
@@ -581,7 +581,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
     }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x4 << 11) | ((number[current_number + 1] & 0x1F) << 14) | (0xFFE << 19);
+    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 7) | (0x4 << 12) | ((number[current_number + 1] & 0x1F) << 15) | (0xFFE << 20);
     current_number += 2;
     break;
    case 71:/* mv */
@@ -589,7 +589,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      printf("Error: Line %li. Register provided is greater than registers available.\n", current_line);
      exit(1);
      }
-    machine_code[i + instruction_offset] = 35 | ((number[current_number] & 0x1F) << 6) | (0x0 << 11) | ((number[current_number + 1] & 0x1F) << 14) | (0x0 << 19);
+    machine_code[i + instruction_offset] = 20 | ((number[current_number] & 0x1F) << 7) | (0x0 << 12) | ((number[current_number + 1] & 0x1F) << 15) | (0x0 << 20);
     current_number += 2;
     break;
   }
