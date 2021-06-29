@@ -48,7 +48,6 @@ function *lookup_function(char *input, function *function_table[], size_t functi
  size_t index = hash(input, fn2_start, fn2_end) % function_count;
  function *tmp = function_table[index];
  while((tmp != NULL) && (strncmp(input + tmp->start, input + fn2_start, tmp->length) != 0)){
-  //printf("tmp =");
   tmp = tmp->next;
  }
  return tmp;
@@ -87,7 +86,6 @@ intmax_t number_return(char *input, size_t start, size_t end, size_t current_lin
    number = number * -1;
   }
  }
- printf("Number: %li\n", number);
  return number;
 }
 

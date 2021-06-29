@@ -2,7 +2,6 @@
 void generate_machine_code(char *input, size_t word_count, size_t *word_start, size_t *word_end, intmax_t *number, size_t instructions_in_code, size_t *instruction, size_t *which_instruction, size_t function_count, function *symbol_table[], size_t line_count, size_t *line, size_t actual_instruction_count, uint32_t *machine_code){
  
 
- //uint32_t machine_code[actual_instruction_count];
  size_t current_number = 0;
  size_t current_line = 1;
  size_t instruction_offset = 0;
