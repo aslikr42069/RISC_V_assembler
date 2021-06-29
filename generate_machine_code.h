@@ -547,11 +547,11 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
      if(which_function->index == (word_count - 1)){
       if(i == (instructions_in_code - 1)){
        machine_code[i + instruction_offset] = 23 | (0x1 << 7) | (0 & 0xFFFFF000);
-       machine_code[i + instruction_offset + 1] = 23 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((0 & 0xFFF) << 20);
+       machine_code[i + instruction_offset + 1] = 103 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((0 & 0xFFF) << 20);
       }else{
        for(size_t j = i; j < instructions_in_code; j++){
         machine_code[i + instruction_offset] = 23 | (0x1 << 7) | (((j - i) * 4) & 0xFFFFF000);
-        machine_code[i + instruction_offset + 1] = 23 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((((j - i) * 4) & 0xFFF) << 20);
+        machine_code[i + instruction_offset + 1] = 103 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((((j - i) * 4) & 0xFFF) << 20);
        }
       }
      } else{
@@ -560,7 +560,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
         next_instruction_position++;
        }
        machine_code[i + instruction_offset] = 23 | (0x1 << 7) | (((next_instruction_position - i) * 4) & 0xFFFFF000);
-       machine_code[i + instruction_offset + 1] = 23 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((((next_instruction_position - i) * 4) & 0xFFF) << 20);
+       machine_code[i + instruction_offset + 1] = 103 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((((next_instruction_position - i) * 4) & 0xFFF) << 20);
      }
     } else {
      size_t next_instruction_position = 0;
@@ -568,7 +568,7 @@ void generate_machine_code(char *input, size_t word_count, size_t *word_start, s
       next_instruction_position++;
      }
      machine_code[i + instruction_offset] = 23 | (0x1 << 7) | (((i - next_instruction_position) * -4) & 0xFFFFF000);
-     machine_code[i + instruction_offset + 1] = 23 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((((i - next_instruction_position) * -4) & 0xFFF) << 20);
+     machine_code[i + instruction_offset + 1] = 103 | (0x1 << 7) | (0 << 12) | (0x1 << 15) | ((((i - next_instruction_position) * -4) & 0xFFF) << 20);
     }
     actual_instruction_count++;
     instruction_offset++;
